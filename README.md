@@ -109,12 +109,3 @@ exp9/
 │   │       └── AndroidManifest.xml              # App manifest & activity declarations
 └── build.gradle.kts
 ```
-
----
-
-## 🚀 How to Build and Run
-
-1. Open the project in **Android Studio** (2024.1+ or newer).
-2. Sync Gradle dependencies by selecting **File > Sync Project with Gradle Files**.
-3. Select an Android Emulator or physical device running **Android 7.0 (API 24)** or higher.
-4. Click **Run 'app'** (`Shift + F10`).
