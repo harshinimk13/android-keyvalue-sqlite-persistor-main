@@ -1,118 +1,213 @@
-# Credential Vault — Android Key-Value SQLite Persistence App
+# Credential Vault – Android Key-Value Persistence App
 
-A clean, modern, and secure Android application demonstrating **SQLite Key-Value Pair Data Persistence**, instant real-time auto-saving as the user types, automatic credential restoration ("auto-paste"), and multi-screen navigation with session management.
+An Android application developed using Kotlin and XML to demonstrate key-value data persistence using SQLite. The application saves user credentials, restores saved values when the app is reopened, and provides login, home dashboard, and logout functionality.
 
----
+## Aim
 
-## 🌟 Key Features
+To develop an Android application that demonstrates data persistence using key-value storage and SQLite database management.
 
-1. **Instant Real-time Persistence**:
-   - As the user types into the Username or Password fields on the Login screen, input is saved instantly into an embedded SQLite database in real-time before clicking Login.
+## Overview
 
-2. **Auto-Fill / Auto-Paste on Launch**:
-   - When the app process is closed or killed and restarted, saved credentials are automatically queried from SQLite and auto-populated into the login fields.
+Credential Vault demonstrates how an Android application can store and retrieve data locally using SQLite.
 
-3. **Key-Value Pair SQLite Persistor**:
-   - Built using a dedicated `SQLiteOpenHelper` (`CredentialDatabaseHelper`) storing data in a key-value pair format (`key_name TEXT PRIMARY KEY, value_text TEXT`).
+The application allows users to enter a username and password, saves the entered values to a local database, and restores previously saved values when the application is reopened.
 
-4. **Home Dashboard & Navigation**:
-   - Successful login redirects the user to `HomeActivity` displaying a personalized welcome greeting.
+After a successful login, the user is redirected to a home screen. The logout functionality clears the saved credentials and returns the user to the login screen.
 
-5. **Session Termination & Logout**:
-   - The Home Dashboard contains a prominent **LOGOUT** button that wipes the saved credentials from the SQLite database and redirects back to the Login screen.
+## Objectives
 
-6. **Professional Material Design UI**:
-   - Clean Material 3 cards, rounded input fields, password toggle visibility, and auto-fill notification badges.
+1. Understand key-value data persistence in Android.
+2. Implement SQLite database creation and management.
+3. Store and retrieve username and password values.
+4. Understand the role of `SQLiteOpenHelper`.
+5. Implement automatic restoration of saved data.
+6. Navigate between login and home screens.
+7. Implement logout functionality to clear stored credentials.
 
----
+## Technologies Used
 
-## 📱 Screenshots & UI Architecture
+- **Programming Language:** Kotlin
+- **Development Environment:** Android Studio
+- **User Interface:** XML
+- **Database:** SQLite
+- **Database Management:** SQLiteOpenHelper
+- **UI Components:** Android Activities and Material Design components
+- **Build System:** Gradle
 
-<img width="716" height="1600" alt="WhatsApp Image 2026-10-01 at 12 43 54 PM" src="https://github.com/user-attachments/assets/f622a715-6494-4ab1-b3ff-1aceffc89037" />
+## Features
 
+### 1. Login Screen
 
-<img width="716" height="1600" alt="WhatsApp Image 2026-10-01 at 12 43 45 PM" src="https://github.com/user-attachments/assets/5475f68b-0d8a-4f6a-aa80-8a39165a415a" />
+Provides input fields for entering a username and password.
 
----
+### 2. Real-Time Data Persistence
 
-## 📊 Application Flowchart
+Saves the entered username and password to the SQLite database as the user types.
 
-```mermaid
-flowchart TD
-    A[Launch App] --> B[MainActivity: onCreate]
-    B --> C{Credentials exist in SQLite?}
-    
-    C -- Yes --> D[Auto-paste Username & Password into fields]
-    C -- No --> E[Display empty Login fields]
-    
-    D --> F[User types or edits credentials]
-    E --> F
-    
-    F -->|Instant TextWatcher Event| G[Save Key-Value Pair to SQLite DB]
-    
-    F --> H[User Clicks LOGIN Button]
-    H --> I{Are fields valid?}
-    
-    I -- No --> J[Show Error Toast]
-    I -- Yes --> K[Save Final State to SQLite DB]
-    K --> L[Redirect to HomeActivity]
-    
-    L --> M[Display Welcome Greeting & Active Session]
-    M --> N[User Clicks LOGOUT Button]
-    
-    N --> O[Delete Credentials from SQLite DB]
-    O --> P[Clear Session & Redirect to MainActivity]
-```
+### 3. Automatic Data Restoration
 
----
+Retrieves previously saved values from SQLite and populates the login fields when the application is reopened.
 
-## 🗄️ Database Architecture
+### 4. Key-Value Storage
 
-The application utilizes an embedded **SQLite Database** named `UserCredentials.db`.
+Stores each value using a unique key, allowing individual values to be retrieved and updated.
 
-### Schema: `credentials`
+### 5. Home Dashboard
+
+Redirects the user to the home screen after successful login and displays a welcome message.
+
+### 6. Logout Functionality
+
+Clears the saved credentials and returns the user to the login screen.
+
+### 7. User-Friendly Interface
+
+Provides a clean interface with input fields, buttons, and Material Design components.
+
+## Application Workflow
+
+1. Launch the application.
+2. The login screen appears.
+3. Previously saved credentials are retrieved from SQLite, if available.
+4. Enter or modify the username and password.
+5. The application saves the entered values to the database.
+6. Click the Login button.
+7. After successful login, the home dashboard appears.
+8. Click Logout to clear the saved credentials and return to the login screen.
+
+## Database Architecture
+
+The application uses an SQLite database named `UserCredentials.db`.
+
+### Database Table: `credentials`
 
 | Column Name | Data Type | Constraint | Description |
-| :--- | :--- | :--- | :--- |
-| `key_name` | `TEXT` | `PRIMARY KEY` | Unique key identifier (e.g., `saved_username`, `saved_password`) |
-| `value_text` | `TEXT` | `NULLABLE` | Persisted string value associated with the key |
+|---|---|---|---|
+| `key_name` | TEXT | PRIMARY KEY | Unique identifier for each stored value |
+| `value_text` | TEXT | As defined in the database schema | Value associated with the key |
 
-* **Location on Device**:  
-  `/data/data/com.example.exp9/databases/UserCredentials.db`
+### Example Key-Value Records
 
----
+| key_name | value_text |
+|---|---|
+| saved_username | Example username |
+| saved_password | Example password |
 
-## 🛠️ Tech Stack & Project Structure
+The values above are examples to explain the database structure, not actual credentials.
 
-* **Language**: Kotlin 1.9 / 2.0
-* **UI Toolkit**: Android Material Design 3 (`com.google.android.material`)
-* **Persistence**: Native Android SQLite (`SQLiteOpenHelper`)
-* **Architecture**: Android Jetpack Components (`AppCompatActivity`, `ViewCompat`, `WindowInsetsCompat`)
+### Database Operations
 
-### File Directory Structure
-```
-exp9/
+The application demonstrates the following database operations:
+
+- **Create:** Creates the database and table when required.
+- **Insert or Update:** Stores new values or updates existing values.
+- **Read:** Retrieves saved values when the application starts.
+- **Delete:** Removes saved credential records during logout.
+
+The database is managed through `SQLiteOpenHelper`.
+
+## Key-Value Persistence Concepts
+
+Android supports different approaches to local key-value persistence.
+
+### SQLite
+
+SQLite stores data in database tables and supports structured queries, inserts, updates, and deletions.
+
+In this project, SQLite is used to persist the username and password.
+
+### SharedPreferences
+
+`SharedPreferences` is another Android mechanism for storing small amounts of data as key-value pairs, such as application settings and simple preferences.
+
+It is a useful concept to understand when comparing Android persistence mechanisms. The application's implemented credential-storage functionality should be described according to the actual source code.
+
+## Project Structure
+
+```text
+android-keyvalue-sqlite-persistor-main/
 ├── app/
-│   ├── src/
-│   │   └── main/
-│   │       ├── java/com/example/exp9/
-│   │       │   ├── MainActivity.kt               # Login UI & Instant Auto-Save logic
-│   │       │   ├── HomeActivity.kt               # Home Dashboard & Logout logic
-│   │       │   └── CredentialDatabaseHelper.kt   # SQLite Key-Value Data Persistor
-│   │       ├── res/
-│   │       │   ├── layout/
-│   │       │   │   ├── activity_main.xml         # Login Screen Layout
-│   │       │   │   └── activity_home.xml         # Home Dashboard Layout
-│   │       │   └── values/
-│   │       │       ├── colors.xml                # Color theme tokens
-│   │       │       └── strings.xml               # Translatable string resources
-│   │       └── AndroidManifest.xml              # App manifest & activity declarations
-└── build.gradle.kts
+│   └── src/
+│       └── main/
+│           ├── java/com/example/exp9/
+│           │   ├── MainActivity.kt
+│           │   ├── HomeActivity.kt
+│           │   └── CredentialDatabaseHelper.kt
+│           ├── res/
+│           │   ├── layout/
+│           │   │   ├── activity_main.xml
+│           │   │   └── activity_home.xml
+│           │   └── values/
+│           │       ├── colors.xml
+│           │       └── strings.xml
+│           └── AndroidManifest.xml
+├── gradle/
+├── build.gradle.kts
+├── settings.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+└── README.md
 ```
 
+*Note: This is the expected structure based on the project's current documentation. Additional files may exist in your actual project.*
 
----
+## Implementation Details
 
+### SQLiteOpenHelper
 
+`CredentialDatabaseHelper.kt` manages the SQLite database, including database creation and database operations.
 
+### MainActivity
 
+`MainActivity.kt` manages the login interface, retrieves saved values, saves user input, and handles login interactions.
+
+### HomeActivity
+
+`HomeActivity.kt` displays the home dashboard and handles logout functionality.
+
+### XML Layouts
+
+- `activity_main.xml` defines the login screen.
+- `activity_home.xml` defines the home dashboard.
+
+## Testing and Test Cases
+
+| Test Case | Scenario | Expected Result |
+|---|---|---|
+| TC01 | Launch the application | Login screen appears |
+| TC02 | Enter a username | Username is saved according to the implemented persistence logic |
+| TC03 | Enter a password | Password is saved according to the implemented persistence logic |
+| TC04 | Restart the application | Previously saved values are restored |
+| TC05 | Log in with valid input | Home dashboard appears |
+| TC06 | Click Logout | Saved credentials are cleared and the login screen appears |
+| TC07 | Reopen the application after logout | Previously cleared credentials are not restored |
+
+**Note:** Verify each test case on your device or emulator before marking it as passed.
+
+## How to Build and Run
+
+1. Clone or download this repository.
+2. Open the project in Android Studio.
+3. Allow Gradle synchronization to complete.
+4. Select an Android emulator or connect an Android device.
+5. Run the application using the Run button or `Shift + F10`.
+6. Test the login, persistence, restoration, and logout functionality.
+
+## Concepts Learned
+
+Through this project, the following concepts are demonstrated:
+
+1. Android application development using Kotlin.
+2. Designing interfaces using XML.
+3. SQLite database creation and management.
+4. Key-value data persistence.
+5. Using `SQLiteOpenHelper`.
+6. Inserting, retrieving, updating, and deleting database records.
+7. Maintaining data across application restarts.
+8. Navigating between Android Activities.
+9. Comparing SQLite with SharedPreferences.
+
+## Result
+
+Thus, the Credential Vault Android application demonstrates local key-value data persistence using SQLite, automatic restoration of saved values, navigation between login and home screens, and credential clearing during logout.
